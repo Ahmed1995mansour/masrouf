@@ -4,6 +4,7 @@
   "description": "سجّل مصاريفك ودخلك وأهدافك، وكل البيانات على موبايلك.",
   "lang": "ar",
   "dir": "rtl",
+  "id": "./",
   "start_url": "./",
   "scope": "./",
   "display": "standalone",

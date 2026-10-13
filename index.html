@@ -476,6 +476,9 @@ function renderHero(){
 }
 function renderBanner(){
   const el=$("backupBanner");
+  if(!isStandalone()&&ui.installEvt){
+    el.innerHTML=`<div class="banner"><p><b>ثبّت التطبيق</b>يفتح من أيقونة على الشاشة زي أي تطبيق، من غير المتصفح.</p><button class="btn sm" data-act="install">ثبّت</button></div>`;return;
+  }
   const old=Date.now()-(data.lastBackup||0)>14*864e5;
   if(data.entries.length<5||!old){el.innerHTML="";return;}
   el.innerHTML=`<div class="banner"><p><b>خد نسخة احتياطية</b>${data.lastBackup?"آخر نسخة من أكتر من أسبوعين":"لسه ماخدتش ولا نسخة"}. احفظها في Drive أو ابعتها لنفسك.</p><button class="btn sm" data-act="export">احفظ</button></div>`;
@@ -702,7 +705,8 @@ $("settingsBtn").onclick=openSettings;
 $("prevM").onclick=()=>{ui.month=shiftMonth(ui.month,-1);ui.openEntry=null;render();};
 $("nextM").onclick=()=>{ui.month=shiftMonth(ui.month,1);ui.openEntry=null;render();};
 document.addEventListener("keydown",e=>{if(e.key==="Escape")closeSheet();});
-window.addEventListener("beforeinstallprompt",e=>{e.preventDefault();ui.installEvt=e;});
+window.addEventListener("beforeinstallprompt",e=>{e.preventDefault();ui.installEvt=e;render();});
+window.addEventListener("appinstalled",()=>{ui.installEvt=null;render();toast("اتثبّت، افتحه من الأيقونة");});
 matchMedia("(prefers-color-scheme: dark)").addEventListener("change",syncThemeColor);
 /* save again when the app goes to background, just in case */
 document.addEventListener("visibilitychange",()=>{if(document.visibilityState==="hidden"&&ui.ready){try{localStorage.setItem(LS_KEY,JSON.stringify(data));}catch(e){}}});
